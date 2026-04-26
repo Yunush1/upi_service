@@ -19,6 +19,7 @@ export class WebhookController {
         @Headers('x-razorpay-signature') signature: string,
         @Body() data: RazorpayWebhookDto,
     ) {
+        console.log(`Received Razorpay webhook: ${JSON.stringify(data)}`);
         // Get raw body for signature verification
         const body = req.rawBody || JSON.stringify(data);
         const secret = process.env.RAZORPAY_WEBHOOK_SECRET || 'test_secret';
@@ -40,7 +41,7 @@ export class WebhookController {
     @Post('/cashfree')
     async handleCashfreeWebhook(@Body() data: Record<string, any>) {
         // Implement Cashfree webhook handling
-        this.logger.log(`Received Cashfree webhook: ${JSON.stringify(data)}`);
+        console.log(`Received Cashfree webhook: ${JSON.stringify(data)}`);
         // return this.webhookService.handlePaymentWebhook(data.event || 'cashfree_event', data);
         return { status: 'processed' };
     }

@@ -33,7 +33,7 @@ export class NotificationService {
         await this.sendEmailNotification(user.email, data);
         break;
       case 'sms':
-        await this.sendSmsNotification(user.phone, data);
+        await this.sendSmsNotification(user.phone!, data);
         break;
       case 'push':
         await this.sendPushNotification(data.userId, data);

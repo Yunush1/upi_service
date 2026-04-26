@@ -5,11 +5,13 @@ import { Payment, PaymentProvider, PaymentStatus } from '../../database/entities
 import { Transaction, TransactionStatus, TransactionType } from '../../database/entities/transaction.entity';
 import { User } from '../../database/entities/user.entity';
 import { CreatePaymentDto, ValidateUpiDto, PaymentStatusDto } from './dto/create-payment.dto';
-import { stat } from 'fs';
+import { SettingsService } from '../../common/services/settings.service';
+import { SettingKey } from '../../database/entities/setting.entity';
 
 @Injectable()
 export class PaymentService {
   private logger = new Logger(PaymentService.name);
+  private configuredProvider: PaymentProvider = PaymentProvider.RAZORPAY;
 
   constructor(
     @InjectRepository(Payment)
@@ -18,7 +20,25 @@ export class PaymentService {
     private transactionRepository: Repository<Transaction>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
+    private settingsService: SettingsService,
+  ) {
+    this.initializeProvider();
+  }
+
+  /**
+   * Initialize provider from settings
+   */
+  private async initializeProvider(): Promise<void> {
+    try {
+      const provider = await this.settingsService.getSetting(SettingKey.PAYMENT_PROVIDER);
+      if (provider === 'CASHFREE' || provider === 'RAZORPAY') {
+        this.configuredProvider = provider as PaymentProvider;
+        this.logger.log(`Payment provider initialized: ${this.configuredProvider}`);
+      }
+    } catch (error) {
+      this.logger.warn(`Failed to load payment provider, using default: ${PaymentProvider.RAZORPAY}`);
+    }
+  }
 
   /**
    * Validate UPI ID format
