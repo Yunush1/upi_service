@@ -20,6 +20,7 @@ export class WebhookController {
         @Body() data: RazorpayWebhookDto,
     ) {
         console.log(`Received Razorpay webhook: ${JSON.stringify(data)}`);
+        this.logger.debug(`Received Razorpay webhook: ${JSON.stringify(data)}`);
         // Get raw body for signature verification
         const body = req.rawBody || JSON.stringify(data);
         const secret = process.env.RAZORPAY_WEBHOOK_SECRET || 'test_secret';

@@ -878,7 +878,7 @@
         let finalOrderId = orderId;
         if (!orderId) {
             try {
-                const res = await fetch(`${API_URL}/payment/create-order`, {
+                const res = await fetch(`${API_URL}/payment/create`, {
                     method: 'POST',
                     headers: { 'Content-Type':'application/json', 'Authorization':`Bearer ${accessToken}` },
                     body: JSON.stringify({ amount, currency:'INR', description: desc })
