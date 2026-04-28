@@ -17,7 +17,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /var/www/upi-service
+            cd ~/upi_service
 
             echo "Pull latest code"
             git pull origin main
