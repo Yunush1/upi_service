@@ -3,38 +3,27 @@ version: '3.8'
 services:
   app:
     build: .
-    container_name: upi_service
     ports:
-      - "${PORT:-8083}:8083"
+      - "8083:8083"
+
     environment:
-      - NODE_ENV=${NODE_ENV:-production}
-      - PORT=${PORT:-8083}
-      - DB_HOST=host.docker.internal
-      - DB_PORT=5432
-      - DB_USER=${DB_USER:-postgres}
-      - DB_PASSWORD=${DB_PASSWORD:-postgres}
-      - DB_NAME=${DB_NAME:-upi_db}
+      NODE_ENV: production
+      PORT: 8083
 
-      - REDIS_HOST=host.docker.internal
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
-      - REDIS_DB=${REDIS_DB:-0}
+      DB_HOST: host.docker.internal
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: upi_db
 
-      - CORS_ORIGIN=${CORS_ORIGIN:-*}
-    networks:
-      - upi-network
-    restart: unless-stopped
-    volumes:
-      - ./src:/src
+      REDIS_HOST: host.docker.internal
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+      REDIS_DB: 0
+
+      CORS_ORIGIN: "*"
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-volumes:
-  postgres_data:
-    driver: local
-  redis_data:
-    driver: local
-
-networks:
-  upi-network:
-    driver: bridge
+    restart: unless-stopped
